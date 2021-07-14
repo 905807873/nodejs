@@ -1,6 +1,9 @@
-var UserSQL = {
-    query:'SELECT * FROM userinfo'
+var select_userinfo = function (params) {
+    return "SELECT * FROM userinfo where username  = '" + params.username + "'"
  }
+ var insert_userinfo = function (params) {
+   return "INSERT INTO userinfo set ?"
+}
  module.exports = {
-    UserSQL
+   select_userinfo,insert_userinfo
   }

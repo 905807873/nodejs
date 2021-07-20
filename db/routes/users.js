@@ -21,9 +21,9 @@ var responseJSON = function (res, ret) {
 };
 
 //进行查询
-router.post('/query', function (req, res, next) {
+router.post('/select', function (req, res, next) {
   pool.getConnection(function (err, connection) {
-    var params = req.query || req.params; //前端传的参数（暂时写这里，在这个例子中没用）
+    var params = req.query || req.params; 
     let sql = qusrySql.select_userinfo(params)
     connection.query(sql, function (err, result) {
       //将结果以json形式返回到前台
@@ -36,8 +36,30 @@ router.post('/query', function (req, res, next) {
 
 router.post('/insert', function (req, res, next) {
   pool.getConnection(function (err, connection) {
-    var params = req.query || req.params; //前端传的参数（暂时写这里，在这个例子中没用）
+    var params = req.query || req.params; 
     let sql = qusrySql.insert_userinfo(params)
+    connection.query(sql, params, function (err, result) {
+      if (err) {
+        res.json({
+          code: "-200",
+          msg: "操作失败"
+        });
+      } else {
+        res.json({
+          code: "200",
+          msg: "操作成功"
+        });
+      }
+      //释放链接
+      connection.release();
+    })
+  })
+})
+
+router.post('/delete', function (req, res, next) {
+  pool.getConnection(function (err, connection) {
+    var params = req.query || req.params; 
+    let sql = qusrySql.delete_userinfo(params)
     connection.query(sql, params, function (err, result) {
       if (err) {
         res.json({
